@@ -1,10 +1,9 @@
 package app;
+import app.data.MongoSomeObjectCrud;
 import app.data.MySqlSomeObjectCrud;
 import app.data.SomeObjectCrud;
 
-import org.apache.catalina.LifecycleState;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -16,7 +15,7 @@ import java.util.List;
 @Controller
 public class SomeController
 {
-    private SomeObjectCrud crud = MySqlSomeObjectCrud.getInstance();
+    private SomeObjectCrud crud = MySqlSomeObjectCrud.getInstance(); //MongoSomeObjectCrud.getInstance();
 
     @GetMapping("/")
     public String home()
@@ -27,7 +26,7 @@ public class SomeController
     @GetMapping("/SomeObject")
     public String getAll(ModelMap modelMap)
     {
-        List<SomeObject> someObjects = crud.getSomeObjects();
+        List<SomeObject> someObjects = crud.getSomeObjectsCollection();
 
         if (someObjects != null && someObjects.size() > 0)
         {

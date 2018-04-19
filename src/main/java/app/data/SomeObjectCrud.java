@@ -11,7 +11,7 @@ public interface SomeObjectCrud
     boolean createSomeObject(SomeObject someObject);
 
     // Read all
-    List<SomeObject> getSomeObjects();
+    List<SomeObject> getSomeObjectsCollection();
 
     // Read one by id
     SomeObject getSomeObject(int id);

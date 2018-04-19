@@ -45,7 +45,7 @@ public class MySqlSomeObjectCrud implements SomeObjectCrud
     }
 
     @Override
-    public List<SomeObject> getSomeObjects()
+    public List<SomeObject> getSomeObjectsCollection()
     {
         try (Connection conn = db.getConn())
         {
