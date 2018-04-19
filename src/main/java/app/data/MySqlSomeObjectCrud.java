@@ -50,7 +50,7 @@ public class MySqlSomeObjectCrud implements SomeObjectCrud
         try (Connection conn = db.getConn())
         {
             Statement statementSelectAll = conn.createStatement();
-            ResultSet resultSet = statementSelectAll.executeQuery("SELECT * FROM tech.someobjects");
+            ResultSet resultSet = statementSelectAll.executeQuery("SELECT * FROM someobjects");
 
             List<SomeObject> someObjects = new ArrayList<>();
 
@@ -82,7 +82,7 @@ public class MySqlSomeObjectCrud implements SomeObjectCrud
     {
         try (Connection conn = db.getConn())
         {
-            PreparedStatement statementSelectSingle = conn.prepareStatement("SELECT * FROM tech.someobjects WHERE id=?"); //
+            PreparedStatement statementSelectSingle = conn.prepareStatement("SELECT * FROM someobjects WHERE id=?"); //
             statementSelectSingle.setInt(1, id);
             ResultSet resultSet = statementSelectSingle.executeQuery();
 
