@@ -15,7 +15,7 @@ import java.util.List;
 @Controller
 public class SomeController
 {
-    private SomeObjectCrud crud = MySqlSomeObjectCrud.getInstance(); //MongoSomeObjectCrud.getInstance();
+    private SomeObjectCrud crud = MongoSomeObjectCrud.getInstance(); //MySqlSomeObjectCrud.getInstance();
 
     @GetMapping("/")
     public String home()

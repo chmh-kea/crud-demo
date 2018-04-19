@@ -2,11 +2,16 @@ package app;
 
 public class SomeObject
 {
+    public static int COUNT = 0;
+
     private int id;
     private String someString;
     private int someInt;
 
-    public SomeObject(){}
+    public SomeObject()
+    {
+
+    }
 
     public SomeObject(int id, String someString, int someInt)
     {

@@ -19,7 +19,7 @@ public class Mongo
     private Mongo()
     {
         client = new MongoClient(); // Overide host and port
-        db = client.getDatabase("somedb");
+        db = client.getDatabase("somedbint");
     }
 
     public MongoDatabase getSomeDb()

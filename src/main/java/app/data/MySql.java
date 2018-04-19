@@ -23,7 +23,7 @@ public class MySql
     {
         // Hardcoded local db credentials
         // CHANGE
-        connString = String.format(CONN_STRING, "localhost", "4200", "tech", "root", "pass1234");
+        connString = String.format(CONN_STRING, "localhost", "4200", "crud-demo", "root", "pass1234");
     }
 
 

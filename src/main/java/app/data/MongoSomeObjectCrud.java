@@ -1,5 +1,5 @@
 package app.data;
-
+import com.mongodb.client.model.Sorts;
 import app.SomeObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
@@ -27,9 +27,14 @@ public class MongoSomeObjectCrud implements SomeObjectCrud
         someDb = Mongo.getInstance().getSomeDb();
         someObjectsCollection = someDb.getCollection("someObjectsCollection");
 
+        Document count = someObjectsCollection.find().sort(Sorts.orderBy(Sorts.descending("_id"))).first();
+        if (count != null)
+            SomeObject.COUNT = count.getInteger("_id");
+        else
+            SomeObject.COUNT = 1;
     }
 
-    private Document toDocument(SomeObject someObject)
+    public Document toDocument(SomeObject someObject)
     {
         Document document = new Document();
         if (someObject.getId() > 0)
@@ -39,7 +44,7 @@ public class MongoSomeObjectCrud implements SomeObjectCrud
         return document;
     }
 
-    private SomeObject fromDocument(Document document)
+    public SomeObject fromDocument(Document document)
     {
         SomeObject someObject = new SomeObject();
         someObject.setId(document.getInteger("_id"));
@@ -51,6 +56,7 @@ public class MongoSomeObjectCrud implements SomeObjectCrud
     @Override
     public boolean createSomeObject(SomeObject someObject)
     {
+        someObject.setId(SomeObject.COUNT++);
         someObjectsCollection.insertOne(toDocument(someObject));
         return true;
     }
