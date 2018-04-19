@@ -1,0 +1,1 @@
+DELETE FROM someobjects WHERE id='2';
