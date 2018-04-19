@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h2>SomePage</h2>
+    <form method="post" th:object="${someObject}">
+        <span>ID:</span>
+        <input name="id" type="number" th:value="${editObject?.id}">
+        <button type="submit" formaction="/SomeObject/Edit">Edit</button>
+        <button type="submit" formaction="/SomeObject/Delete">Delete</button>
+        <br/>
+        <span>SomeString:</span>
+        <input name="someString" type="text" th:value="${editObject?.someString}">
+        <span>SomeInt:</span>
+        <input name="someInt" type="number" th:value="${editObject?.someInt}">
+        <button type="submit" formaction="/SomeObject/Create">Create</button>
+        <button type="submit" formaction="/SomeObject/Update">Update</button>
+    </form>
+    <p>
+        <span th:text="${crudFeedback}">No Actions Taken</span>
+    </p>
+
+
+    <ul>
+        <li th:each="someObject : ${someObjects}" >
+            <p th:text="${someObject.toString()}"></p>
+        </li>
+    </ul>
+
+</body>
+</html>
