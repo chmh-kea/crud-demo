@@ -2,6 +2,7 @@ package app.data;
 
 import app.SomeObject;
 
+import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -110,23 +111,61 @@ public class MySqlSomeObjectCrud implements SomeObjectCrud
     @Override
     public boolean updateSomeObject(SomeObject someObject)
     {
-        try (Connection conn = db.getConn())
+        Connection conn = null;
+
+        try
         {
-            PreparedStatement preparedStatementUpdate = conn.prepareStatement("UPDATE someobjects SET someString=?, someInt=? WHERE id=?"); //
-            preparedStatementUpdate.setString(1, someObject.getSomeString());
-            preparedStatementUpdate.setInt(2, someObject.getSomeInt());
-            preparedStatementUpdate.setInt(3, someObject.getId());
+            conn = db.getConn();
 
-            int res = preparedStatementUpdate.executeUpdate();
+            conn.setAutoCommit(false); // Disables auto commit so transaction is only done on commit
+            conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED); // ISOLATION level arbitralaly set
 
-            if (res > 0)
+            PreparedStatement updateString = conn.prepareStatement("UPDATE someobjects SET someInt=? WHERE id=?"); // !!!ERROR HERE!!!
+            PreparedStatement updateInt = conn.prepareStatement("UPDATE someobjects SET someInt=? WHERE id=?");//"UPDATE someobjects SET someString=?, someInt=? WHERE id=?"); //
+
+            updateString.setString(1, someObject.getSomeString());
+            updateInt.setInt(1, someObject.getSomeInt());
+
+            updateString.setInt(2, someObject.getId());
+            updateInt.setInt(2, someObject.getId());
+
+            int resString = updateString.executeUpdate();
+            int resInt = updateInt.executeUpdate();
+
+            if (resInt+resString > 1)
+            {
+                conn.commit();
                 return true;
-            return false;
+            }
+            else
+            {
+                conn.rollback();
+                return false;
+            }
         }
         catch (SQLException ex)
         {
+            try
+            {
+                conn.rollback(); // Rolls back on sql exceptions
+            }
+            catch (SQLException ex2)
+            {
+                ex2.printStackTrace();
+            }
             ex.printStackTrace();
             return false;
+        }
+        finally
+        {
+            try
+            {
+                conn.close();
+            }
+            catch (SQLException ex)
+            {
+                ex.printStackTrace();
+            }
         }
     }
 
