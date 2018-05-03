@@ -1,27 +1,36 @@
 package app.data;
 
 import app.SomeObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component("mySqlSomeObjectCrud")
 public class MySqlSomeObjectCrud implements SomeObjectCrud
 {
+    @Autowired
     private MySql db;
 
-    private static MySqlSomeObjectCrud instance;
-    public static MySqlSomeObjectCrud getInstance()
+//    private static MySqlSomeObjectCrud instance;
+//    public static MySqlSomeObjectCrud getInstance()
+//    {
+//        if(instance == null)
+//            instance = new MySqlSomeObjectCrud();
+//        return instance;
+//    }
+
+    public MySqlSomeObjectCrud()
     {
-        if(instance == null)
-            instance = new MySqlSomeObjectCrud();
-        return instance;
+        //db = MySql.getInstance();
     }
 
-    private MySqlSomeObjectCrud()
+    public boolean createSomeObjecs(List<SomeObject> list)
     {
-        db = MySql.getInstance();
+        return  true;
     }
 
     @Override
@@ -118,10 +127,13 @@ public class MySqlSomeObjectCrud implements SomeObjectCrud
             conn = db.getConn();
 
             conn.setAutoCommit(false); // Disables auto commit so transaction is only done on commit
-            conn.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED); // ISOLATION level arbitralaly set
+            conn.setTransactionIsolation(Connection.TRANSACTION_SERIALIZABLE); // ISOLATION level arbitralaly set
+
+
 
             PreparedStatement updateString = conn.prepareStatement("UPDATE someobjects SET someInt=? WHERE id=?"); // !!!ERROR HERE!!!
             PreparedStatement updateInt = conn.prepareStatement("UPDATE someobjects SET someInt=? WHERE id=?");//"UPDATE someobjects SET someString=?, someInt=? WHERE id=?"); //
+
 
             updateString.setString(1, someObject.getSomeString());
             updateInt.setInt(1, someObject.getSomeInt());
@@ -129,8 +141,9 @@ public class MySqlSomeObjectCrud implements SomeObjectCrud
             updateString.setInt(2, someObject.getId());
             updateInt.setInt(2, someObject.getId());
 
-            int resString = updateString.executeUpdate();
             int resInt = updateInt.executeUpdate();
+            int resString = updateString.executeUpdate();
+
 
             if (resInt+resString > 1)
             {

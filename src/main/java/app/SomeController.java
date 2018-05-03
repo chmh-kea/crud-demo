@@ -3,6 +3,8 @@ import app.data.MongoSomeObjectCrud;
 import app.data.MySqlSomeObjectCrud;
 import app.data.SomeObjectCrud;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +17,19 @@ import java.util.List;
 @Controller
 public class SomeController
 {
-    private SomeObjectCrud crud = MySqlSomeObjectCrud.getInstance(); //MongoSomeObjectCrud.getInstance();
+    @Value("${spring.datasource.db}")
+    String db;
+
+    @Value("${SPRING_DATASOURCE_HOST:spring.datasource.host}")
+    String host;
+
+    @Autowired
+    private SomeObjectCrud crud;// = MySqlSomeObjectCrud.getInstance(); //MongoSomeObjectCrud.getInstance();
 
     @GetMapping("/")
-    public String home()
+    public String home(ModelMap modelMap)
     {
+        modelMap.addAttribute("crudFeedback", "DB : "+db+"<br/> HOST : " +host);
         return "somepage";
     }
 
